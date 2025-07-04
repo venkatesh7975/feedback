@@ -9,20 +9,28 @@ export default function Login() {
   async function onFormLogin(e) {
     e.preventDefault();
     // email is unique ,password is storng
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return;
-    }
     //axios post request
     const response = await axios.post("http://localhost:3000/login", {
       email,
       password,
     });
     //store token in localstorage
-    localStorage.setItem("token", response.data);
-    console.log(response.data);
-    navigate("/feedback");
+    console.log(response.data.token);
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      navigate("/feedback");
+      return;
+    }
+    alert(response.data.message);
   }
+
+
+
+
+
+
+
+
   function onEmailChange(e) {
     setEmail(e.target.value);
   }

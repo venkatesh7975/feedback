@@ -30,8 +30,18 @@ const userSchema = new mongoose.Schema({
   password: String,
 });
 
+//create schema for feedback
+
+const feedbackSchema=new mongoose.Schema({
+    name:String,
+    message:String
+});
+
 //create model for the model
 const User = mongoose.model("User", userSchema);
+
+//create model for feedback
+const Feedback=mongoose.model("Feedback",feedbackSchema);
 
 //post api for register
 app.post("/register", async function (req, res) {
@@ -64,12 +74,26 @@ app.post("/login", async function (req, res) {
     if (isMatch) {
       //create token
       const token = await jwt.sign(email, "secret_key");
-      res.json(token); //sending the success as message
+      res.json({ token: token }); //sending the success as message
     } else {
-      res.json("password not matching ");
+      res.json({message:"password not matching "});
     }
   } else {
-    res.json("user not found");
+    res.json({ message: "user not found" });
   }
 });
 
+
+
+app.post('/feedback',async(req,res)=>{
+    const {name,message}=req.body;
+    const feedback=new Feedback({name:name,message:message});
+    const result = await feedback.save();
+    res.json(result);
+})
+
+app.get("/feedbacks",async(req,res)=>{
+    const feedbacks=await Feedback.find({});
+
+    res.json(feedbacks)
+})
