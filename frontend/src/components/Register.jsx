@@ -6,37 +6,47 @@ export default function Register() {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const navigate=useNavigate();
-    async function onFormRegister(e){
-        e.preventDefault()
-       // email is unique ,password is storng
-       if (password.length<6){
+    async function onFormRegister(e) {
+      e.preventDefault();
+      // email is unique ,password is storng
+      if (password.length < 6) {
         alert("Password must be at least 6 characters");
         return;
-
-       }
-       //axios post request
-       const response= await axios.post("http://localhost:3001/register",{email,password})
-       console.log(response.data)
-       navigate("/login")
-
-
+      }
+      //axios post request
+      const response = await axios.post("http://localhost:3000/register", {
+        email,
+        password,
+      });
+      console.log(response.data);
+      navigate("/login");
     }
-    function onEmailChange(e){
-
-        setEmail(e.target.value)
-       
+    function onEmailChange(e) {
+      setEmail(e.target.value);
     }
-    function onPasswordChange(e){
-        setPassword(e.target.value)
-
+    function onPasswordChange(e) {
+      setPassword(e.target.value);
     }
-  return (
-    <div>
+    return (
+      <div>
         <form onSubmit={onFormRegister}>
-            <input type="email" name="email" placeholder="Email" onChange={onEmailChange}/>
-            <input type="password" name="password" placeholder="Password" onChange={onPasswordChange}/>
-            <button type="submit">Register</button>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={onEmailChange}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={onPasswordChange}
+          />
+          <button type="submit">Register</button>
         </form>
-    </div>
-  )
+        <p>
+          Already have an account,please <a href="/login">login</a>{" "}
+        </p>
+      </div>
+    );
 }
